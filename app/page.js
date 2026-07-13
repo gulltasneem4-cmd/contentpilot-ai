@@ -1,9 +1,23 @@
+'use client';
+import { useState } from 'react';
+
 export default function Dashboard() {
-  const clients = [
+  const [clients, setClients] = useState([
     { name: 'Sunset Bakery', niche: 'Local Bakery' },
     { name: 'FitLife Studio', niche: 'Fitness Coach' },
     { name: 'Bloom Florals', niche: 'Flower Shop' },
-  ];
+  ]);
+  const [showForm, setShowForm] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newNiche, setNewNiche] = useState('');
+
+  function handleAddClient() {
+    if (newName.trim() === '') return;
+    setClients([...clients, { name: newName, niche: newNiche || 'General' }]);
+    setNewName('');
+    setNewNiche('');
+    setShowForm(false);
+  }
 
   return (
     <main
@@ -28,6 +42,7 @@ export default function Dashboard() {
             🚀 ContentPilot AI
           </h1>
           <button
+            onClick={() => setShowForm(!showForm)}
             style={{
               backgroundColor: '#6366F1',
               color: '#FFFFFF',
@@ -38,9 +53,68 @@ export default function Dashboard() {
               cursor: 'pointer',
             }}
           >
-            + Add Client
+            {showForm ? 'Cancel' : '+ Add Client'}
           </button>
         </div>
+
+        {showForm && (
+          <div
+            style={{
+              backgroundColor: '#1A1A22',
+              border: '1px solid #2A2A35',
+              borderRadius: '10px',
+              padding: '20px',
+              marginBottom: '20px',
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Client name"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px',
+                marginBottom: '10px',
+                borderRadius: '6px',
+                border: '1px solid #2A2A35',
+                backgroundColor: '#0F0F14',
+                color: '#FFFFFF',
+                boxSizing: 'border-box',
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Niche (e.g. Coffee Shop)"
+              value={newNiche}
+              onChange={(e) => setNewNiche(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px',
+                marginBottom: '14px',
+                borderRadius: '6px',
+                border: '1px solid #2A2A35',
+                backgroundColor: '#0F0F14',
+                color: '#FFFFFF',
+                boxSizing: 'border-box',
+              }}
+            />
+            <button
+              onClick={handleAddClient}
+              style={{
+                backgroundColor: '#6366F1',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '10px 18px',
+                fontSize: '0.95rem',
+                cursor: 'pointer',
+              }}
+            >
+              Save Client
+            </button>
+          </div>
+        )}
 
         <h2
           style={{
